@@ -128,6 +128,7 @@ jobs:
          terraform_version: 1.3.0
     
     - name: Setup Profile
+      uses: aws-actions/configure-aws-credentials@v2
       run: |
         aws configure set aws_access_key_id ${{ env.PROD_AWS_ACCESS_KEY_ID }} --profile prodprofile
         aws configure set aws_secret_access_key ${{ env.PROD_AWS_SECRET_ACCESS_KEY }} --profile prodprofile
