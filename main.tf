@@ -21,6 +21,10 @@ terraform {
 
 }
 
+provider "aws" {
+  region = "us-east-2"
+}
+
 provider "rhcs" {
   token = var.token
   url   = var.url
