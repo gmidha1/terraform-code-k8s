@@ -131,6 +131,10 @@ jobs:
       run: |
         aws configure set aws_access_key_id ${{ env.PROD_AWS_ACCESS_KEY_ID }} --profile prodprofile
         aws configure set aws_secret_access_key ${{ env.PROD_AWS_SECRET_ACCESS_KEY }} --profile prodprofile
+    
+    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+    - name: AWS LS
+      run: aws s3 ls
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
