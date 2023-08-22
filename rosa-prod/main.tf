@@ -14,7 +14,7 @@ terraform {
   }
 
   backend "s3" {
-    bucket = "prod-tf-bucket-rosa-aug21"
+    bucket = "prod-tf-bucket-rosa-aug22"
     key    = "infra"
     region = "us-east-2"
   }
