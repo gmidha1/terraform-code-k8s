@@ -13,6 +13,12 @@ terraform {
     }
   }
 
+  backend "s3" {
+    bucket = "tf-bucket-rosa-aug22"
+    key    = "infra"
+    region = "us-east-2"
+  }
+
 }
 
 provider "aws" {
