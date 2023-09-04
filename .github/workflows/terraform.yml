@@ -58,7 +58,7 @@ env:
  # S3 bucket for the Terraform state
  BUCKET_TF_STATE: ${{ secrets.BUCKET_TF_STATE}}
  TOKEN: ${{ secrets.TOKEN}}
- ROLE_ARN: ${{ secrets.ROLE_ARN }}
+ GH_ROLE_ARN: ${{ secrets.ROLE_ARN }}
  
 
 jobs:
@@ -81,7 +81,7 @@ jobs:
     - name: Configure aws credentials
       uses: aws-actions/configure-aws-credentials@v3
       with:
-        role-to-assume: "$ROLE_ARN"
+        role-to-assume: "$GH_ROLE_ARN"
         aws-region: us-east-2
 
     
