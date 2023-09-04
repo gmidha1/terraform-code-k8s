@@ -55,9 +55,6 @@ permissions:
 env:
  # verbosity setting for Terraform logs
  TF_LOG: INFO
- # Credentials for deployment to AWS
- AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
- AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
  # S3 bucket for the Terraform state
  BUCKET_TF_STATE: ${{ secrets.BUCKET_TF_STATE}}
  TOKEN: ${{ secrets.TOKEN}}
@@ -67,7 +64,7 @@ jobs:
   create-rosa-dev-env:
     name: 'Create ROSA DEV environment'
     runs-on: ubuntu-latest
-    environment: production
+    environment: development
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
@@ -86,52 +83,15 @@ jobs:
       with:
          terraform_version: 1.3.0
 
+    - name: Configure aws credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        role-to-assume: arn:aws:iam::773091391314:role/github-actions-role
+        aws-region: us-east-2
+
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
       run: terraform init -backend-config="bucket=$BUCKET_TF_STATE"
-
-    # Checks that all Terraform configuration files adhere to a canonical format
-    #- name: Terraform Format
-    #  run: terraform fmt -check
-
-    # Generates an execution plan for Terraform
-    - name: Terraform Plan
-      run: terraform plan -input=false -var="token=$TOKEN"
-
-      # On push to "main", build or change infrastructure according to Terraform configuration files
-    - name: Terraform Apply
-      run: terraform apply -auto-approve -input=false -var="token=$TOKEN"
-  create-rosa-dev-prod:
-    name: 'Create ROSA PROD environment'
-    runs-on: ubuntu-latest
-    environment: production
-    env:
-      # Credentials for deployment to AWS PROD
-      AWS_ACCESS_KEY_ID: ${{ secrets.PROD_AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}
-      # S3 bucket for the Terraform state
-      PROD_BUCKET_TF_STATE: ${{ secrets.PROD_BUCKET_TF_STATE}}
-
-    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
-    defaults:
-      run:
-        shell: bash
-        working-directory: ./rosa-prod
-
-    steps:
-    # Checkout the repository to the GitHub Actions runner
-    - name: Checkout
-      uses: actions/checkout@v3
-
-    # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v1
-      with:
-         terraform_version: 1.3.0
-  
-    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
-    - name: Terraform Init
-      run: terraform init -backend-config="bucket=$PROD_BUCKET_TF_STATE"
 
     # Checks that all Terraform configuration files adhere to a canonical format
     #- name: Terraform Format
