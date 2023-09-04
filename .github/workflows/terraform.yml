@@ -66,10 +66,10 @@ jobs:
     name: 'Create ROSA DEV environment'
     runs-on: ubuntu-latest
     environment: development
-    #permissions:
-     # packages: write
-      #contents: read
-      #id-token: write
+    permissions:
+      packages: write
+      contents: read
+      id-token: write
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
