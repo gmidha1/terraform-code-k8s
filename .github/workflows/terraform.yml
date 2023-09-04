@@ -81,7 +81,7 @@ jobs:
     - name: Configure aws credentials
       uses: aws-actions/configure-aws-credentials@v3
       with:
-        role-to-assume: "$GH_ROLE_ARN"
+        role-to-assume: ${{ secrets.ROLE_ARN }}
         aws-region: us-east-2
 
     
