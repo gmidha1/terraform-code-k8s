@@ -77,7 +77,7 @@ variable "operator_role_prefix" {
 
 variable "cluster_name" {
   type    = string
-  default = "gmidha04"
+  default = "gmidha05"
 }
 
 variable "cloud_region" {
