@@ -113,7 +113,7 @@ jobs:
       run: terraform apply -auto-approve -input=false -var="token=$TOKEN"
     
   create-rosa-prod-env:
-    name: 'Create ROSA DEV environment'
+    name: 'Create ROSA PROD environment'
     runs-on: ubuntu-latest
     environment: production
     permissions:
