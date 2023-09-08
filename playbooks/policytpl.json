@@ -1,0 +1,24 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Principal": {
+          "AWS": "arn:aws:iam::account_id:role/github-actions-rosa-role"
+        },
+        "Action": "s3:ListBucket",
+        "Resource": "arn:aws:s3:::dev_bucket"
+      },
+      {
+        "Effect": "Allow",
+        "Principal": {
+          "AWS": "arn:aws:iam::account_id:role/github-actions-rosa-role"
+        },
+        "Action": [
+          "s3:GetObject",
+          "s3:PutObject"
+        ],
+        "Resource": "arn:aws:s3:::dev_bucket/*"
+      }
+    ]
+}

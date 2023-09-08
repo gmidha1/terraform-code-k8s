@@ -1,0 +1,54 @@
+---
+  - name: Create s3 bucket for TF State file
+    hosts: localhost
+    tasks:
+      - name: Replace before the account id in assumerole.json
+        shell: sed s/account_id/{{ lookup('ansible.builtin.env', 'AWS_ACCOUNT_ID') }}/g assumeroletpl.json > assumerole.json
+      - name: Replace before the account id and bucket name in policy.json
+        shell: sed "s/dev_bucket/{{ lookup('ansible.builtin.env', 'AWS_BUCKET') }}/g; s/account_id/{{ lookup('ansible.builtin.env', 'AWS_ACCOUNT_ID') }}/g" policytpl.json > policy.json
+      - name: Check for existing OIDC
+        shell: >
+          aws iam list-open-id-connect-providers --output text | grep -i githubusercontent
+        register: existing_oidc
+        changed_when: false
+        ignore_errors: true
+      
+      - name: Parse existing OIDC response
+        set_fact:
+          oidc: "{{ existing_oidc.stdout }}"
+
+      - name: Create OIDC for IAM Role
+        command: >
+          aws iam create-open-id-connect-provider --cli-input-json file://create-open-id-connect-provider.json
+        register: oidc_output
+        when: oidc == ''
+      
+      - name: Print OIDC result 
+        debug:
+          msg: "{{ oidc_output }}"
+
+      - name: Create IAM Role for ROSA and GitHub Actions
+        iam_role:
+          name: github-actions-rosa-role
+          assume_role_policy_document: "{{ lookup('file','assumerole.json') }}"
+          managed_policy:
+            - arn:aws:iam::aws:policy/AdministratorAccess
+        register: iamrole
+    
+      - name: Create new bucket
+        amazon.aws.s3_bucket:
+          name: "{{ lookup('ansible.builtin.env', 'AWS_BUCKET') }}"
+          state: present
+          region: us-east-2
+          versioning: true 
+          encryption: "AES256"
+          policy: "{{ lookup('file','policy.json') }}"
+          public_access:
+            block_public_acls: false
+        register: s3bucket
+      
+      - name: Print resources
+        debug:
+          msg: "Role is {{ iamrole.arn }} & bucket is {{ s3bucket.name }}"
+
+      

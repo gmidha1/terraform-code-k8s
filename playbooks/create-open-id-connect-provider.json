@@ -1,0 +1,15 @@
+{
+    "Url": "https://token.actions.githubusercontent.com",
+    "ClientIDList": [
+        "sts.amazonaws.com"
+    ],
+    "ThumbprintList": [
+        "1c58a3a8518e8759bf075b76b750d4f2df264fcd"
+    ],
+    "Tags": [
+        {
+            "Key": "name",
+            "Value": "github-actions-oidc"
+        }
+    ]
+}
