@@ -46,7 +46,7 @@ module "operator_roles" {
 
   create_operator_roles = true
   create_oidc_provider  = true
-  create_account_roles  = false
+  create_account_roles  = true
 
   cluster_id                  = rhcs_cluster_rosa_classic.rosa_sts_cluster.id
   rh_oidc_provider_thumbprint = rhcs_cluster_rosa_classic.rosa_sts_cluster.sts.thumbprint
@@ -77,7 +77,7 @@ variable "operator_role_prefix" {
 
 variable "cluster_name" {
   type    = string
-  default = "midhadev11"
+  default = "midhadev10"
 }
 
 variable "cloud_region" {
