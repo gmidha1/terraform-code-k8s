@@ -15,6 +15,8 @@ locals {
 data "aws_caller_identity" "current" {
 }
 
+data "rhcs_policies" "all_policies" {}
+
 resource "rhcs_cluster_rosa_classic" "rosa_sts_cluster" {
   name               = var.cluster_name
   cloud_region       = var.cloud_region
@@ -46,13 +48,17 @@ module "operator_roles" {
 
   create_operator_roles = true
   create_oidc_provider  = true
-  create_account_roles  = false
+  create_account_roles  = true
 
   cluster_id                  = rhcs_cluster_rosa_classic.rosa_sts_cluster.id
   rh_oidc_provider_thumbprint = rhcs_cluster_rosa_classic.rosa_sts_cluster.sts.thumbprint
   rh_oidc_provider_url        = rhcs_cluster_rosa_classic.rosa_sts_cluster.sts.oidc_endpoint_url
   operator_roles_properties   = data.rhcs_rosa_operator_roles.operator_roles.operator_iam_roles
   tags                        = var.tags
+  ocm_environment             = var.ocm_environment
+  account_role_policies       = data.rhcs_policies.all_policies.account_role_policies
+  operator_role_policies      = data.rhcs_policies.all_policies.operator_role_policies
+ 
 }
 
 output "cluster_id" {
@@ -77,7 +83,7 @@ variable "operator_role_prefix" {
 
 variable "cluster_name" {
   type    = string
-  default = "midhadev11"
+  default = "devclstr10"
 }
 
 variable "cloud_region" {
