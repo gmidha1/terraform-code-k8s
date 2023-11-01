@@ -15,6 +15,8 @@ locals {
 data "aws_caller_identity" "current" {
 }
 
+data "rhcs_policies" "all_policies" {}
+
 resource "rhcs_cluster_rosa_classic" "rosa_sts_cluster" {
   name               = var.cluster_name
   cloud_region       = var.cloud_region
