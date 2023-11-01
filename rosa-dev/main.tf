@@ -8,7 +8,7 @@ terraform {
       version = ">= 4.20.0"
     }
     rhcs = {
-      version = ">= 1.1.0"
+      version = ">= 1.4.0"
       source  = "terraform-redhat/rhcs"
     }
   }
@@ -36,7 +36,7 @@ data "rhcs_versions" "all" {}
 
 module "create_account_roles" {
   source  = "terraform-redhat/rosa-sts/aws"
-  version = "0.0.12"
+  version = "0.0.15"
 
   create_operator_roles = false
   create_oidc_provider  = false
