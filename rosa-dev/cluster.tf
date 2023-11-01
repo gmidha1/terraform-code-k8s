@@ -56,7 +56,8 @@ module "operator_roles" {
   operator_roles_properties   = data.rhcs_rosa_operator_roles.operator_roles.operator_iam_roles
   tags                        = var.tags
   ocm_environment             = var.ocm_environment
-  account_role_policies  = data.rhcs_policies.all_policies.account_role_policies
+  account_role_policies       = data.rhcs_policies.all_policies.account_role_policies
+  operator_role_policies      = data.rhcs_policies.all_policies.operator_role_policies
  
 }
 
