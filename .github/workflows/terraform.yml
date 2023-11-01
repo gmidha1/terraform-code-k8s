@@ -151,10 +151,6 @@ jobs:
     - name: Terraform Init
       run: terraform init -backend-config="bucket=$BUCKET_TF_STATE"
     
-    # Generates an execution plan for Terraform
-    - name: Terraform Plan
-      run: terraform plan -destroy -input=false -var="token=$TOKEN"
-    
     # On push to "main", build or change infrastructure according to Terraform configuration files
     - name: Terraform Apply
       run: terraform apply -destroy -auto-approve -input=false -var="token=$TOKEN"
