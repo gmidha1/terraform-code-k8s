@@ -117,6 +117,7 @@ jobs:
     if: ${{ vars.DEV_DESTROY == 'true' }}
     runs-on: ubuntu-latest
     environment: development
+    needs: create-rosa-dev-env
     permissions:
       packages: write
       contents: read
