@@ -112,55 +112,6 @@ jobs:
     - name: Terraform Apply
       run: terraform apply -auto-approve -input=false -var="token=$TOKEN"
   
-  create-rosa-dev-env:
-    name: 'Create ROSA DEV environment'
-    runs-on: ubuntu-latest
-    environment: development
-    permissions:
-      packages: write
-      contents: read
-      id-token: write
-
-    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
-    defaults:
-      run:
-        shell: bash
-        working-directory: ./rosa-dev
-
-    steps:
-    - name: Configure aws credentials
-      uses: aws-actions/configure-aws-credentials@v3
-      with:
-        role-to-assume: ${{ secrets.ROLE_ARN }}
-        aws-region: us-east-2
-
-    
-    # Checkout the repository to the GitHub Actions runner
-    - name: Checkout
-      uses: actions/checkout@v3
-
-    # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v1
-      with:
-         terraform_version: 1.3.0
-
-    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
-    - name: Terraform Init
-      run: terraform init -backend-config="bucket=$BUCKET_TF_STATE"
-
-    # Checks that all Terraform configuration files adhere to a canonical format
-    #- name: Terraform Format
-    #  run: terraform fmt -check
-
-    # Generates an execution plan for Terraform
-    - name: Terraform Plan
-      run: terraform plan -input=false -var="token=$TOKEN"
-
-      # On push to "main", build or change infrastructure according to Terraform configuration files
-    - name: Terraform Apply
-      run: terraform apply -auto-approve -input=false -var="token=$TOKEN"
-  
   destroy-rosa-dev-env:
     name: 'Destroy ROSA DEV environment'
     if: ${{ vars.DEV_DESTROY == 'true' }}
